@@ -1,4 +1,7 @@
-const BracketTree = require('./bracket-tree');
+const chai = require('chai');
+const BracketTree = require('./../src/bracket-tree');
+
+const expect = chai.expect;
 
 describe('tree', () => {
   it('long expr', () => {
@@ -26,7 +29,7 @@ describe('tree', () => {
       }]
     };
 
-    expect(received).toEqual(expected);
+    expect(received).deep.equal(expected);
   });
 
   it('no-brackets', () => {
@@ -47,6 +50,6 @@ describe('tree', () => {
       }]
     };
 
-    expect(expected).toEqual(received);
+    expect(expected).deep.equal(received);
   });
 });
