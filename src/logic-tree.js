@@ -32,7 +32,6 @@ const findAssociative = (rootParamName, treeNodes) => {
 class LogicTree {
 
   constructor(treeNodes, rootParam) {
-    debugger;
     this.nodes = treeNodes;
     this.rootParam = rootParam;
 

@@ -1,5 +1,5 @@
-const BracketTree = require('./../src/bracket-tree');
-const LogicTree = require('./../src/logic-tree');
+const BracketTree = require('../src/bracket-tree');
+const LogicTree = require('../src/logic-tree');
 const chai = require('chai');
 
 const expect = chai.expect;
@@ -10,6 +10,7 @@ const build = (expr) => {
 };
 
 describe('logic-tree', () => {
+
   it('one condition', () => {
     const expr = 'condition';
 

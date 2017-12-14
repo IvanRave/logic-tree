@@ -1,5 +1,5 @@
 const chai = require('chai');
-const BracketTree = require('./../src/bracket-tree');
+const BracketTree = require('../src/bracket-tree');
 
 const expect = chai.expect;
 
