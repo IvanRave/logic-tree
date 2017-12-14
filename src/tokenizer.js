@@ -4,7 +4,9 @@ const tokenNames = {
   IDENTIFIER: 'T_IDENTIFIER',
   OR: 'T_OR',
   AND: 'T_AND',
-  SPACE: 'T_SPACE'
+  SPACE: 'T_SPACE',
+  OPEN_PAREN: 'T_OPEN_PAREN',
+  CLOSE_PAREN: 'T_CLOSE_PAREN',
 };
 
 const tokens = [
@@ -19,6 +21,14 @@ const tokens = [
   {
     name: tokenNames.AND,
     pattern: /^and(?=\s|)/i
+  },
+  {
+    name: tokenNames.OPEN_PAREN,
+    pattern: /^\(/i
+  },
+  {
+    name: tokenNames.CLOSE_PAREN,
+    pattern: /^\)/i
   },
   {
     name: tokenNames.IDENTIFIER,
@@ -45,6 +55,14 @@ class Tokenizer {
     return this.config.ignoreWhiteSpaces && isWhiteSpace;
   }
 
+  /**
+   * Start lexer
+   * @returns {Array<{
+   *    name: string,
+   *    value: string,
+   *    position: string
+   * }>}
+   */
   run() {
     while (this.position !== this.text.length) {
       for (let i = 0; i < tokens.length; i++) {

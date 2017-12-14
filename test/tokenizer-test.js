@@ -101,4 +101,49 @@ describe('Tokenizer', () => {
       }
     ]);
   });
+
+  it('Should tokenize open parenthesis', () => {
+    const sourceCode = 'or(';
+    const tokens = tokenize(sourceCode, {
+      ignoreWhiteSpaces: true
+    });
+
+    expect(tokens).deep.equals([
+      {
+        name: 'T_OR',
+        value: 'or',
+        position: 0
+      },
+      {
+        name: 'T_OPEN_PAREN',
+        value: '(',
+        position: 2
+      }
+    ]);
+  });
+
+  it('Should tokenize close parenthesis', () => {
+    const sourceCode = ')))';
+    const tokens = tokenize(sourceCode, {
+      ignoreWhiteSpaces: true
+    });
+
+    expect(tokens).deep.equals([
+      {
+        name: 'T_CLOSE_PAREN',
+        value: ')',
+        position: 0
+      },
+      {
+        name: 'T_CLOSE_PAREN',
+        value: ')',
+        position: 1
+      },
+      {
+        name: 'T_CLOSE_PAREN',
+        value: ')',
+        position: 2
+      }
+    ]);
+  });
 });
