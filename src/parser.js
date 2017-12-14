@@ -58,7 +58,13 @@ class Parser {
   }
 
   parseBinaryExpression(token) {
+    /**
+     * TODO: отвязаться от указания конкретных BinaryExpression, придумать как обобщить
+     */
     if ([tokens.names.AND, tokens.names.OR].includes(token.name)) {
+      /**
+       * TODO: тут может быть не идентификатор, придумать как проверять совместимость с BinaryExpression
+       */
       const nextToken = this.parseIdentifier(this.next());
       return new BinaryExpression(token.name, {
         left: this.contextTree,
