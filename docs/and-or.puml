@@ -1,0 +1,20 @@
+@startuml
+center header LogicTree
+
+class AndParam {
+  name: String
+  isNegation: Boolean
+  text: String: x OR y
+  orParams: Array<OrParam>
+}
+
+class OrParam {
+  text: String: a AND b AND c
+  andParams: Array<AndParam>
+}
+
+AndParam "1" --* "many" OrParam
+OrParam "1" --* "many" AndParam
+
+center footer recursion
+@enduml
