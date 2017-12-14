@@ -32,3 +32,7 @@ Build a JSON object from a logic expression string
       }]
     }
 ```
+
+## Entity-relationship model
+
+![Logic tree relationship](./docs/and-or.png)
