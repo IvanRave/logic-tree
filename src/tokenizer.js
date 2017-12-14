@@ -1,40 +1,5 @@
 const head = require('ramda/src/head');
-
-const tokenNames = {
-  IDENTIFIER: 'T_IDENTIFIER',
-  OR: 'T_OR',
-  AND: 'T_AND',
-  SPACE: 'T_SPACE',
-  OPEN_PAREN: 'T_OPEN_PAREN',
-  CLOSE_PAREN: 'T_CLOSE_PAREN',
-};
-
-const tokens = [
-  {
-    name: tokenNames.SPACE,
-    pattern: /^\s+/
-  },
-  {
-    name: tokenNames.OR,
-    pattern: /^or(?=\s|)/i
-  },
-  {
-    name: tokenNames.AND,
-    pattern: /^and(?=\s|)/i
-  },
-  {
-    name: tokenNames.OPEN_PAREN,
-    pattern: /^\(/i
-  },
-  {
-    name: tokenNames.CLOSE_PAREN,
-    pattern: /^\)/i
-  },
-  {
-    name: tokenNames.IDENTIFIER,
-    pattern: /^([a-zA-Z_])+\w*/
-  }
-];
+const tokens = require('./tokens');
 
 class Tokenizer {
 
@@ -51,7 +16,7 @@ class Tokenizer {
   }
 
   shouldIgnoreWhiteSpace(token) {
-    const isWhiteSpace = token.name === tokenNames.SPACE;
+    const isWhiteSpace = token.name === tokens.names.SPACE;
     return this.config.ignoreWhiteSpaces && isWhiteSpace;
   }
 
@@ -65,8 +30,8 @@ class Tokenizer {
    */
   run() {
     while (this.position !== this.text.length) {
-      for (let i = 0; i < tokens.length; i++) {
-        const token = tokens[i];
+      for (let i = 0; i < tokens.list.length; i++) {
+        const token = tokens.list[i];
         const pattern = token.pattern;
         const text = this.text.slice(this.position);
         const match = text.match(pattern);
