@@ -1,3 +1,6 @@
+const reject  = require('ramda/src/reject');
+const equals  = require('ramda/src/equals');
+
 // type OrParam = {
 //   text: string,
 //   andParams: Array<AndParam>
@@ -27,24 +30,40 @@ const findAssociative = (rootParamName, treeNodes) => {
 };
 
 class LogicTree {
-  constructor(treeNodes, rootParam) {
-    const rootParamName = rootParam.replace(REGEX_NEGATION, '');
-    const isNegation = REGEX_NEGATION.test(rootParam);
-    const associative = findAssociative(rootParamName, treeNodes);
 
-    this.isNegation = isNegation ? true : undefined;
+  constructor(treeNodes, rootParam) {
+    this.nodes = treeNodes;
+    this.rootParam = rootParam;
+
+    const rootParamName = this.rootParam.replace(REGEX_NEGATION, '');
+    const isNegation = REGEX_NEGATION.test(this.rootParam);
+    const associative = findAssociative(rootParamName, this.nodes);
+
+    if (isNegation) {
+      this.isNegation = isNegation;
+    }
+
     this.paramName = rootParamName;
-    this.paramContent = associative && associative.text;
+    this.content = associative && associative.text;
     this.orParams = associative && associative.text.split(OPERATOR_OR).map((orPart) => {
       // !c AND p AND !node0
       const andParams = orPart
         .split(OPERATOR_AND)
-        .map(andParam => new LogicTree(associative.nodes, andParam));
+        .map(andParam => new LogicTree(associative.nodes, andParam).getAst());
 
       return {
         text: orPart,
         andParams
       };
+    });
+  }
+
+  getAst() {
+    return reject(equals(undefined))({
+      isNegation: this.isNegation,
+      name: this.paramName,
+      content: this.content,
+      orParams: this.orParams
     });
   }
 }

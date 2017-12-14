@@ -2,18 +2,27 @@
   "name": "logic-tree",
   "version": "0.1.0",
   "description": "Build a JSON object from a logic expression string",
-  "keywords": ["logic", "expression", "parser", "tree"],
+  "keywords": [
+    "logic",
+    "expression",
+    "parser",
+    "tree"
+  ],
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "mocha test",
     "lint": "eslint src/**/*.js"
   },
   "author": "Ivan Reyvart",
   "license": "Apache-2.0",
   "devDependencies": {
+    "chai": "^4.1.2",
     "eslint": "^4.12.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
-    "jest": "^21.2.1"
+    "mocha": "^4.0.1"
+  },
+  "dependencies": {
+    "ramda": "^0.25.0"
   }
 }
