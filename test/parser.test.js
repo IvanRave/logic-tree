@@ -1,5 +1,6 @@
 const chai = require('chai');
 const Parser = require('../src/parser');
+const UnexpectedTokenException = require('../src/unexpected-token-exception');
 
 const expect = chai.expect;
 
@@ -15,10 +16,15 @@ describe('AST Builder test', () => {
       name: 'T_OR',
       value: 'and',
       position: 3
+    },
+    unexpected: {
+      name: 'T_UNEXPECTED',
+      value: '',
+      position: 5
     }
   };
 
-  it('', () => {
+  it('should build identifier', () => {
     const parser = new Parser([
       tokens.identifier
     ]);
@@ -31,7 +37,7 @@ describe('AST Builder test', () => {
     });
   });
 
-  it('shoult build binary expression', () => {
+  it('should build binary expression', () => {
     const parser = new Parser([
       tokens.identifier,
       tokens.or,
@@ -53,5 +59,15 @@ describe('AST Builder test', () => {
         }
       }
     });
+  });
+
+  it('should throw Unexpected token exception', () => {
+    const parser = new Parser([
+      tokens.unexpected
+    ]);
+
+    const willException = () => parser.parse();
+
+    expect(willException).throw(UnexpectedTokenException);
   });
 });

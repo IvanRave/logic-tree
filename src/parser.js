@@ -1,4 +1,5 @@
 const tokens = require('./tokens');
+const UnexpectedTokenException = require('./unexpected-token-exception');
 
 class BinaryExpression {
 
@@ -82,13 +83,17 @@ class Parser {
         this.parseBinaryExpression.bind(this)
       ];
 
-      parsers.some((parser) => {
+      const parsed = parsers.some((parser) => {
         const parsed = parser(token);
         if (parsed) {
           this.contextTree = parsed;
           return true;
         }
       });
+
+      if (!parsed) {
+        throw new UnexpectedTokenException(token);
+      }
 
       this.next();
     }
