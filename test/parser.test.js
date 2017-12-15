@@ -47,16 +47,15 @@ describe('AST Builder test', () => {
     const ast = parser.parse();
 
     expect(ast).deep.equals({
-      binaryExpression: {
-        type: 'T_OR',
-        left: {
-          type: 'Identifier',
-          name: 'a'
-        },
-        right: {
-          type: 'Identifier',
-          name: 'a'
-        }
+      type: 'BinaryExpression',
+      operator: 'T_OR',
+      left: {
+        type: 'Identifier',
+        name: 'a'
+      },
+      right: {
+        type: 'Identifier',
+        name: 'a'
       }
     });
   });
@@ -64,6 +63,29 @@ describe('AST Builder test', () => {
   it('should throw Unexpected token exception', () => {
     const parser = new Parser([
       tokens.unexpected
+    ]);
+
+    const willException = () => parser.parse();
+
+    expect(willException).throw(UnexpectedTokenException);
+  });
+
+  it('should not parse binary expression when token lacks', () => {
+    const parser = new Parser([
+      tokens.identifier,
+      tokens.or
+    ]);
+
+    const willException = () => parser.parse();
+
+    expect(willException).throw(UnexpectedTokenException);
+  });
+
+  xit('should not parse binary expression when token is incorrect', () => {
+    const parser = new Parser([
+      tokens.identifier,
+      tokens.or,
+      tokens.or
     ]);
 
     const willException = () => parser.parse();
