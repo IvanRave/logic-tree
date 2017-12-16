@@ -1,5 +1,6 @@
 const tokens = require('./tokens');
 const UnexpectedTokenException = require('./unexpected-token-exception');
+const UnexpectedEndOfLineException = require('./unexpected-end-of-line-exception');
 const {isTokenInRange} = require('./utils');
 
 class BinaryExpression {
@@ -14,12 +15,12 @@ class BinaryExpression {
     this.right = params.right;
   }
 
-  getAst() {
+  parse() {
     return {
       type: this.type,
       operator: this.operator,
-      left: this.left.getAst(),
-      right: this.right.getAst()
+      left: this.left.parse(),
+      right: this.right.parse()
     };
   }
 }
@@ -34,7 +35,7 @@ class Identifier {
     this.name = token.value;
   }
 
-  getAst() {
+  parse() {
     return {
       type: this.type,
       name: this.name
@@ -60,7 +61,13 @@ class Parser {
     return this.peek();
   }
 
+  /**
+   * TODO: take off parsers
+   */
   parseIdentifier(token) {
+    /**
+     * TODO: Common precondition, inherit or check before parse
+     */
     if (!token) {
       return false;
     }
@@ -68,6 +75,8 @@ class Parser {
     if (token.name === tokens.names.IDENTIFIER) {
       return new Identifier(token);
     }
+
+    return false;
   }
 
   parseBinaryExpression(token) {
@@ -80,6 +89,9 @@ class Parser {
       tokens.names.OR
     ];
 
+    /**
+     * TODO: check types. Can be token, or parsed node
+     */
     const operandNames = [
       tokens.names.IDENTIFIER
     ];
@@ -100,13 +112,57 @@ class Parser {
     });
   }
 
+  parseParentheses(token) {
+
+    if (!token) {
+      return false;
+    }
+
+    const {
+      OPEN_PAREN: openParenName,
+      CLOSE_PAREN: closeParenName
+    } = tokens.names;
+
+    if (token.name === openParenName) {
+      this.next();
+
+      /**
+       * TODO: think about Iterator
+       */
+      let currentPosition = this.current;
+      let subTokens = [];
+      while (currentPosition < this.tokens.length) {
+        const token = this.peek(currentPosition - this.current);
+
+        if (token.name === closeParenName) {
+          if (subTokens.length === 0) {
+            throw UnexpectedTokenException(token);
+          }
+
+          this.current = currentPosition;
+          return new Parser(subTokens);
+        }
+
+        subTokens.push(token);
+        currentPosition++;
+      }
+
+      throw new UnexpectedEndOfLineException([
+        closeParenName
+      ]);
+    }
+
+    return false;
+  }
+
   parse() {
     while (this.tokens.length !== this.current) {
       const token = this.peek();
 
       const parsers = [
         this.parseIdentifier.bind(this),
-        this.parseBinaryExpression.bind(this)
+        this.parseBinaryExpression.bind(this),
+        this.parseParentheses.bind(this)
       ];
 
       const parsed = parsers.some((parser) => {
@@ -125,7 +181,7 @@ class Parser {
       this.next();
     }
 
-    return this.contextTree.getAst();
+    return this.contextTree.parse();
   }
 }
 
