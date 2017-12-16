@@ -1,6 +1,6 @@
-# Logic tree
+#  Abstract syntax tree for logic expressions
 
-Build a JSON object from a logic expression string
+Build an AST (JSON object) from a logic expression string
 
 ## Input
 
@@ -36,3 +36,19 @@ Build a JSON object from a logic expression string
 ## Entity-relationship model
 
 ![Logic tree relationship](./docs/and-or.png)
+
+
+## Boolean expression
+
+- [Logical conjunction](https://en.wikipedia.org/wiki/Logical_conjunction)
+- [Logical disjunction] (https://en.wikipedia.org/wiki/Logical_disjunction)
+  - [Logical exclusive disjunction] (https://en.wikipedia.org/wiki/Exclusive_or)
+- [Logical negation] (https://en.wikipedia.org/wiki/Negation)
+
+[First-order logic](https://en.wikipedia.org/wiki/First-order_logic)
+
+## Binary boolean expresssion tree
+
+![Binary boolean expression tree](https://upload.wikimedia.org/wikipedia/commons/a/a1/Exp-tree-ex-13.svg)
+
+https://en.wikipedia.org/wiki/Binary_expression_tree
