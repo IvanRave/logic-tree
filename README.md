@@ -38,12 +38,12 @@ Build an AST (JSON object) from a logic expression string
 ![Logic tree relationship](./docs/and-or.png)
 
 
-## Boolean expression
+## Logical operators
 
 - [Logical conjunction](https://en.wikipedia.org/wiki/Logical_conjunction)
-- [Logical disjunction] (https://en.wikipedia.org/wiki/Logical_disjunction)
-  - [Logical exclusive disjunction] (https://en.wikipedia.org/wiki/Exclusive_or)
-- [Logical negation] (https://en.wikipedia.org/wiki/Negation)
+- [Logical disjunction](https://en.wikipedia.org/wiki/Logical_disjunction)
+  - [Logical exclusive disjunction](https://en.wikipedia.org/wiki/Exclusive_or)
+- [Logical negation](https://en.wikipedia.org/wiki/Negation)
 
 [First-order logic](https://en.wikipedia.org/wiki/First-order_logic)
 
