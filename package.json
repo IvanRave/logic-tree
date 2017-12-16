@@ -10,12 +10,16 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "mocha test",
+    "test": "mocha --require babel-register test",
     "lint": "eslint src/**/*.js"
   },
   "author": "Ivan Reyvart",
   "license": "Apache-2.0",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-builtin-extend": "^1.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "eslint": "^4.12.0",
     "eslint-config-airbnb-base": "^12.1.0",

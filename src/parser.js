@@ -2,16 +2,13 @@ const tokens = require('./tokens');
 const UnexpectedTokenException = require('./unexpected-token-exception');
 const {isTokenInRange} = require('./utils');
 
-/**
- * TODO: Add static fields syntax
- * @type {string}
- */
-const BinaryExpressionType = 'BinaryExpression';
 class BinaryExpression {
+
+  static type = 'BinaryExpression';
 
   constructor(token, params) {
     this.token = token;
-    this.type = BinaryExpressionType;
+    this.type = BinaryExpression.type;
     this.operator = token.value;
     this.left = params.left;
     this.right = params.right;
@@ -27,12 +24,13 @@ class BinaryExpression {
   }
 }
 
-const IdentifierType = 'Identifier';
 class Identifier {
+
+  static type = 'Identifier';
 
   constructor(token) {
     this.token = token;
-    this.type = IdentifierType;
+    this.type = Identifier.type;
     this.name = token.value;
   }
 
