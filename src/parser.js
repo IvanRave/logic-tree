@@ -1,6 +1,6 @@
 const tokens = require('./tokens');
 const UnexpectedTokenException = require('./unexpected-token-exception');
-const {checkItemsInRange} = require('./utils');
+const {isTokenInRange} = require('./utils');
 
 /**
  * TODO: Add static fields syntax
@@ -9,9 +9,10 @@ const {checkItemsInRange} = require('./utils');
 const BinaryExpressionType = 'BinaryExpression';
 class BinaryExpression {
 
-  constructor(operator, params) {
+  constructor(token, params) {
+    this.token = token;
     this.type = BinaryExpressionType;
-    this.operator = operator;
+    this.operator = token.value;
     this.left = params.left;
     this.right = params.right;
   }
@@ -29,9 +30,10 @@ class BinaryExpression {
 const IdentifierType = 'Identifier';
 class Identifier {
 
-  constructor(name) {
+  constructor(token) {
+    this.token = token;
     this.type = IdentifierType;
-    this.name = name;
+    this.name = token.value;
   }
 
   getAst() {
@@ -66,7 +68,7 @@ class Parser {
     }
 
     if (token.name === tokens.names.IDENTIFIER) {
-      return new Identifier(token.value);
+      return new Identifier(token);
     }
   }
 
@@ -75,35 +77,29 @@ class Parser {
       return false;
     }
 
-    const binaryOperatorsNames = [
+    const binaryOperatorNames = [
       tokens.names.AND,
       tokens.names.OR
     ];
 
-    const operandsNames = [
-      IdentifierType
+    const operandNames = [
+      tokens.names.IDENTIFIER
     ];
 
-    if (checkItemsInRange(binaryOperatorsNames, [token.name])) {
-      /**
-       * TODO: научиться парсить не только идентификаторы
-       * @type {boolean|*}
-       */
-      const nextToken = this.parseIdentifier(
-        this.peek(1)
-      );
+    const nextToken = this.peek(1);
 
-      if (!checkItemsInRange(operandsNames, [this.contextTree.type, nextToken.type])) {
-        return false;
-      }
-
-      this.next();
-
-      return new BinaryExpression(token.name, {
-        left: this.contextTree,
-        right: nextToken
-      });
+    if (!isTokenInRange(binaryOperatorNames, token)
+      || !isTokenInRange(operandNames, nextToken)
+      || !isTokenInRange(operandNames, this.contextTree.token)) {
+      return false;
     }
+
+    this.next();
+
+    return new BinaryExpression(token, {
+      left: this.contextTree,
+      right: this.parseIdentifier(nextToken)
+    });
   }
 
   parse() {
