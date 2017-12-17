@@ -2,9 +2,10 @@ const names = {
   IDENTIFIER: 'T_IDENTIFIER',
   OR: 'T_OR',
   AND: 'T_AND',
+  NOT: 'T_NOT',
   SPACE: 'T_SPACE',
   OPEN_PAREN: 'T_OPEN_PAREN',
-  CLOSE_PAREN: 'T_CLOSE_PAREN',
+  CLOSE_PAREN: 'T_CLOSE_PAREN'
 };
 
 const list = [
@@ -19,6 +20,10 @@ const list = [
   {
     name: names.AND,
     pattern: /^and(?=\s|)/i
+  },
+  {
+    name: names.NOT,
+    pattern: /^not(?=\s|)/i
   },
   {
     name: names.OPEN_PAREN,
