@@ -40,12 +40,26 @@ Build an AST (JSON object) from a logic expression string
 
 ## Logical operators
 
-- [Logical conjunction](https://en.wikipedia.org/wiki/Logical_conjunction)
-- [Logical disjunction](https://en.wikipedia.org/wiki/Logical_disjunction)
-  - [Logical exclusive disjunction](https://en.wikipedia.org/wiki/Exclusive_or)
-- [Logical negation](https://en.wikipedia.org/wiki/Negation)
+- [Logical negation NOT](https://en.wikipedia.org/wiki/Negation)
+- [Logical conjunction AND](https://en.wikipedia.org/wiki/Logical_conjunction)
+  - [Logical NAND](https://en.wikipedia.org/wiki/Sheffer_stroke)
+- [Logical disjunction OR](https://en.wikipedia.org/wiki/Logical_disjunction)
+  - [Logical NOR](https://en.wikipedia.org/wiki/Logical_NOR)
+  - [Logical exclusive disjunction XOR](https://en.wikipedia.org/wiki/Exclusive_or)
+  - [Logical equality XNOR](https://en.wikipedia.org/wiki/Logical_equality)
 
-[First-order logic](https://en.wikipedia.org/wiki/First-order_logic)
+## Logical truth table
+
+| a | b | AND | OR  | NAND| NOR | XOR | XNOR|
+|---|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| 0 | 0 |  0  |  0  |  1  |  1  |  0  |  1  |
+| 0 | 1 |  0  |  1  |  1  |  0  |  1  |  0  |
+| 1 | 0 |  0  |  1  |  1  |  0  |  1  |  0  |
+| 1 | 1 |  1  |  1  |  0  |  0  |  0  |  1  |
+
+- a NAND b == NOT(A AND B)
+- a XOR b  == (a OR b) AND (a NAND b)
+- a XNOR b == NOT(a XOR b)
 
 ## Binary boolean expresssion tree
 
