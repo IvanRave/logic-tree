@@ -1,14 +1,13 @@
 const tokens = require('./tokens');
 const UnexpectedTokenException = require('./unexpected-token-exception');
 const UnexpectedEndOfLineException = require('./unexpected-end-of-line-exception');
-const {isTokenInRange} = require('./utils');
+const {isTokenInRange, isNodeInRange} = require('./utils');
 
 class BinaryExpression {
 
   static type = 'BinaryExpression';
 
   constructor(token, params) {
-    this.token = token;
     this.type = BinaryExpression.type;
     this.operator = token.value;
     this.left = params.left;
@@ -30,7 +29,6 @@ class Identifier {
   static type = 'Identifier';
 
   constructor(token) {
-    this.token = token;
     this.type = Identifier.type;
     this.name = token.value;
   }
@@ -89,18 +87,38 @@ class Parser {
       tokens.names.OR
     ];
 
-    /**
-     * TODO: check types. Can be token, or parsed node
-     */
-    const operandNames = [
+    const nextTokenNames = [
       tokens.names.IDENTIFIER
+    ];
+
+    const prevNodes = [
+      Identifier.type,
+      BinaryExpression.type
     ];
 
     const nextToken = this.peek(1);
 
     if (!isTokenInRange(binaryOperatorNames, token)
-      || !isTokenInRange(operandNames, nextToken)
-      || !isTokenInRange(operandNames, this.contextTree.token)) {
+      || !isTokenInRange(nextTokenNames, nextToken)
+      || !isNodeInRange(prevNodes, this.contextTree.type)) {
+
+      /**
+       * TODO: refactor
+       */
+      if (!isTokenInRange([tokens.names.OPEN_PAREN], nextToken)) {
+        return false;
+      }
+
+      const parenToken = this.next();
+      const parenParseResult = this.parseParentheses(parenToken);
+
+      if (parenParseResult) {
+        return new BinaryExpression(token, {
+          left: this.contextTree,
+          right: parenParseResult
+        });
+      }
+
       return false;
     }
 
