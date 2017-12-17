@@ -48,29 +48,6 @@ describe('Parser', () => {
     });
   });
 
-  it('should build binary expression', () => {
-    const parser = new Parser([
-      tokens.identifier,
-      tokens.or,
-      tokens.identifier
-    ]);
-
-    const ast = parser.parse();
-
-    expect(ast).deep.equals({
-      type: 'BinaryExpression',
-      operator: 'or',
-      left: {
-        type: 'Identifier',
-        name: 'a'
-      },
-      right: {
-        type: 'Identifier',
-        name: 'a'
-      }
-    });
-  });
-
   it('should throw Unexpected token exception', () => {
     const parser = new Parser([
       tokens.unexpected
@@ -81,27 +58,87 @@ describe('Parser', () => {
     expect(willException).throw(UnexpectedTokenException);
   });
 
-  it('should not parse binary expression when token lacks', () => {
-    const parser = new Parser([
-      tokens.identifier,
-      tokens.or
-    ]);
+  describe('BinaryExpression', () => {
+    it('should build binary expression', () => {
+      const parser = new Parser([
+        tokens.identifier,
+        tokens.or,
+        tokens.identifier
+      ]);
 
-    const willException = () => parser.parse();
+      const ast = parser.parse();
 
-    expect(willException).throw(UnexpectedTokenException);
-  });
+      expect(ast).deep.equals({
+        type: 'BinaryExpression',
+        operator: 'or',
+        left: {
+          type: 'Identifier',
+          name: 'a'
+        },
+        right: {
+          type: 'Identifier',
+          name: 'a'
+        }
+      });
+    });
 
-  it('should not parse binary expression when token is incorrect', () => {
-    const parser = new Parser([
-      tokens.identifier,
-      tokens.or,
-      tokens.or
-    ]);
+    it('should not parse binary expression when token lacks', () => {
+      const parser = new Parser([
+        tokens.identifier,
+        tokens.or
+      ]);
 
-    const willException = () => parser.parse();
+      const willException = () => parser.parse();
 
-    expect(willException).throw(UnexpectedTokenException);
+      expect(willException).throw(UnexpectedTokenException);
+    });
+
+    it('should not parse binary expression when token is incorrect', () => {
+      const parser = new Parser([
+        tokens.identifier,
+        tokens.or,
+        tokens.or
+      ]);
+
+      const willException = () => parser.parse();
+
+      expect(willException).throw(UnexpectedTokenException);
+    });
+
+    it('should correct parse chain of BinaryExpression', () => {
+      const parser = new Parser([
+        tokens.identifier,
+        tokens.or,
+        tokens.identifier,
+        tokens.or,
+        tokens.identifier
+      ]);
+
+      const originalAst = parser.parse();
+
+      const expectedAst = {
+        type: 'BinaryExpression',
+        operator: 'or',
+        left: {
+          type: 'BinaryExpression',
+          operator: 'or',
+          left: {
+            type: 'Identifier',
+            name: 'a'
+          },
+          right: {
+            type: 'Identifier',
+            name: 'a'
+          }
+        },
+        right: {
+          type: 'Identifier',
+          name: 'a'
+        }
+      };
+
+      expect(originalAst).deep.equals(expectedAst);
+    });
   });
 
   describe('parenthesis', () => {
@@ -154,18 +191,41 @@ describe('Parser', () => {
       });
     });
 
-    xit('should correct parse opening and closing parenthesis in the middle', () => {
+    it('should parse with changed priority by parentheses', () => {
       const parser = new Parser([
         tokens.identifier,
         tokens.or,
+        tokens.openParen,
         tokens.identifier,
         tokens.or,
-        tokens.identifier
+        tokens.identifier,
+        tokens.closeParen
       ]);
 
-      const ast = parser.parse();
+      const originalAst = parser.parse();
 
-      console.log(ast);
-    })
+      const expectedAst = {
+        type: 'BinaryExpression',
+        operator: 'or',
+        left: {
+          type: 'Identifier',
+          name: 'a'
+        },
+        right: {
+          type: 'BinaryExpression',
+          operator: 'or',
+          left: {
+            type: 'Identifier',
+            name: 'a'
+          },
+          right: {
+            type: 'Identifier',
+            name: 'a'
+          }
+        }
+      };
+
+      expect(originalAst).deep.equals(expectedAst);
+    });
   });
 });
