@@ -57,11 +57,11 @@ Build an AST (JSON object) from a logic expression string
 
 | Language| Negation | Conjunction | Disjunction | XOR |
 |---------|:--------:|:-----------:|:-----------:|:---:|
-| C++     |  !       | &&          | \           |     |
+| C++     |  !       | &&          | \|\|        | ^   |
 | Fortran | .NOT.    | .AND.       | .OR.        |.XOR.|
-| Java    | !        | &&          |  \|\|       |     |
+| Java    | !        | &&          |  \|\|       | ^   |
 | Pascal  | not      | and         | or          | xor |
-| PL/I    | ¬        | &           | \           |     |
+| PL/I    | ¬        | &           | \|          | ^   |
 | Prolog  |  \+      | ,           | ;           |     |
 | Turbo Basic | NOT  | AND         | OR          | XOR |
 | SQL     | NOT      | AND         | OR          |     |
