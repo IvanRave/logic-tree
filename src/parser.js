@@ -41,7 +41,8 @@ class Parser {
     ];
 
     const nextTokenNames = [
-      tokens.names.IDENTIFIER
+      tokens.names.IDENTIFIER,
+      tokens.names.OPEN_PAREN
     ];
 
     const prevNodes = [
@@ -54,24 +55,6 @@ class Parser {
     if (!isTokenInRange(binaryOperatorNames, token)
       || !isTokenInRange(nextTokenNames, nextToken)
       || !isNodeInRange(prevNodes, this.contextTree.type)) {
-
-      /**
-       * TODO: refactor
-       */
-      if (!isTokenInRange([tokens.names.OPEN_PAREN], nextToken)) {
-        return null;
-      }
-
-      const parenToken = this.next();
-      const parenParseResult = this.parseParentheses(parenToken);
-
-      if (parenParseResult) {
-        return new BinaryExpression(token, {
-          left: this.contextTree,
-          right: parenParseResult
-        });
-      }
-
       return null;
     }
 
@@ -79,7 +62,7 @@ class Parser {
 
     return new BinaryExpression(token, {
       left: this.contextTree,
-      right: this.parseIdentifier(nextToken)
+      right: this.parseByToken(nextToken)
     });
   }
 
