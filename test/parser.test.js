@@ -28,6 +28,11 @@ describe('Parser', () => {
       value: ')',
       position: 4,
     },
+    not: {
+      name: 'T_NOT',
+      value: 'not',
+      position: 5
+    },
     unexpected: {
       name: 'T_UNEXPECTED',
       value: '',
@@ -226,6 +231,58 @@ describe('Parser', () => {
       };
 
       expect(originalAst).deep.equals(expectedAst);
+    });
+  });
+
+  describe('UnaryExpression', () => {
+    it('should parse UnaryExpression with Identifier', () => {
+      const parser = new Parser([
+        tokens.not,
+        tokens.identifier
+      ]);
+
+      const originalAst = parser.parse();
+
+      const expectedAst = {
+        type: 'UnaryExpression',
+        name: 'not',
+        value: {
+          type: 'Identifier',
+          name: 'a'
+        }
+      };
+
+      expect(expectedAst).deep.equals(originalAst);
+    });
+
+    it('should parse UnaryExpression chain', () => {
+      const parser = new Parser([
+        tokens.not,
+        tokens.not,
+        tokens.not,
+        tokens.identifier
+      ]);
+
+      const originalAst = parser.parse();
+
+      const expectedAst = {
+        type: 'UnaryExpression',
+        name: 'not',
+        value: {
+          type: 'UnaryExpression',
+          name: 'not',
+          value: {
+            type: 'UnaryExpression',
+            name: 'not',
+            value: {
+              type: 'Identifier',
+              name: 'a'
+            }
+          }
+        }
+      };
+
+      expect(expectedAst).deep.equals(originalAst);
     });
   });
 });

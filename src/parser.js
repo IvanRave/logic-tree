@@ -1,45 +1,11 @@
+const isNil = require('ramda/src/isNil');
 const tokens = require('./tokens');
+const BinaryExpression = require('./types/binary-expression');
+const UnaryExpression = require('./types/unary-expression');
+const Identifier = require('./types/identifier');
 const UnexpectedTokenException = require('./unexpected-token-exception');
 const UnexpectedEndOfLineException = require('./unexpected-end-of-line-exception');
 const {isTokenInRange, isNodeInRange} = require('./utils');
-
-class BinaryExpression {
-
-  static type = 'BinaryExpression';
-
-  constructor(token, params) {
-    this.type = BinaryExpression.type;
-    this.operator = token.value;
-    this.left = params.left;
-    this.right = params.right;
-  }
-
-  parse() {
-    return {
-      type: this.type,
-      operator: this.operator,
-      left: this.left.parse(),
-      right: this.right.parse()
-    };
-  }
-}
-
-class Identifier {
-
-  static type = 'Identifier';
-
-  constructor(token) {
-    this.type = Identifier.type;
-    this.name = token.value;
-  }
-
-  parse() {
-    return {
-      type: this.type,
-      name: this.name
-    };
-  }
-}
 
 class Parser {
 
@@ -63,25 +29,12 @@ class Parser {
    * TODO: take off parsers
    */
   parseIdentifier(token) {
-    /**
-     * TODO: Common precondition, inherit or check before parse
-     */
-    if (!token) {
-      return false;
-    }
-
     if (token.name === tokens.names.IDENTIFIER) {
       return new Identifier(token);
     }
-
-    return false;
   }
 
   parseBinaryExpression(token) {
-    if (!token) {
-      return false;
-    }
-
     const binaryOperatorNames = [
       tokens.names.AND,
       tokens.names.OR
@@ -106,7 +59,7 @@ class Parser {
        * TODO: refactor
        */
       if (!isTokenInRange([tokens.names.OPEN_PAREN], nextToken)) {
-        return false;
+        return null;
       }
 
       const parenToken = this.next();
@@ -119,7 +72,7 @@ class Parser {
         });
       }
 
-      return false;
+      return null;
     }
 
     this.next();
@@ -131,11 +84,6 @@ class Parser {
   }
 
   parseParentheses(token) {
-
-    if (!token) {
-      return false;
-    }
-
     const {
       OPEN_PAREN: openParenName,
       CLOSE_PAREN: closeParenName
@@ -169,37 +117,74 @@ class Parser {
         closeParenName
       ]);
     }
+  }
 
-    return false;
+  parseUnaryExpression(token) {
+    /**
+     * TODO: think how to describe grammar with state machine
+     */
+    const unaryOperatorNames = [
+      tokens.names.NOT
+    ];
+
+    if (!isTokenInRange(unaryOperatorNames, token)) {
+      return null;
+    }
+
+    const nextTokenNames = [
+      tokens.names.NOT,
+      tokens.names.IDENTIFIER,
+      tokens.names.OPEN_PAREN
+    ];
+
+    const nextTokenForCheck = this.peek(1);
+
+    if (!isTokenInRange(nextTokenNames, nextTokenForCheck)) {
+      return null;
+    }
+
+    const nextToken = this.next();
+    const nextExpression = this.parseByToken(nextToken);
+
+    return new UnaryExpression(token, nextExpression);
   }
 
   parse() {
     while (this.tokens.length !== this.current) {
       const token = this.peek();
 
-      const parsers = [
-        this.parseIdentifier.bind(this),
-        this.parseBinaryExpression.bind(this),
-        this.parseParentheses.bind(this)
-      ];
-
-      const parsed = parsers.some((parser) => {
-        const parseResult = parser(token);
-
-        if (parseResult) {
-          this.contextTree = parseResult;
-          return true;
-        }
-      });
-
-      if (!parsed) {
-        throw new UnexpectedTokenException(token);
-      }
+      this.contextTree = this.parseByToken(token);
 
       this.next();
     }
 
     return this.contextTree.parse();
+  }
+
+  parseByToken(token) {
+    const parsers = [
+      this.parseIdentifier.bind(this),
+      this.parseBinaryExpression.bind(this),
+      this.parseParentheses.bind(this),
+      this.parseUnaryExpression.bind(this)
+    ];
+
+    let parseByTokenResult = null;
+
+    const parsed = parsers.some((parser) => {
+      const parseResult = token ? parser(token) : null;
+
+      if (!isNil(parseResult)) {
+        parseByTokenResult = parseResult;
+        return true;
+      }
+    });
+
+    if (parsed) {
+      return parseByTokenResult;
+    }
+
+    throw new UnexpectedTokenException(token);
   }
 }
 
