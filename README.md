@@ -53,6 +53,23 @@ Build an AST (JSON object) from a logic expression string
 | 1 | 0 |  0  |  1  |  1  |  0  |  1  |  0  |
 | 1 | 1 |  1  |  1  |  0  |  0  |  0  |  1  |
 
+## Different syntax in programming and natural languages
+
+| Language| Negation | Conjunction | Disjunction | XOR |
+|---------|:--------:|:-----------:|:-----------:|:---:|
+| C++     |  !       | &&          | \           |     |
+| Fortran | .NOT.    | .AND.       | .OR.        |.XOR.|
+| Java    | !        | &&          |  \|\|       |     |
+| Pascal  | not      | and         | or          | xor |
+| PL/I    | ¬        | &           | \           |     |
+| Prolog  |  \+      | ,           | ;           |     |
+| Turbo Basic | NOT  | AND         | OR          | XOR |
+| SQL     | NOT      | AND         | OR          |     |
+| English | not      | and         | or          | either |
+| Russian | не       |  и          | или         | либо|
+
+https://en.wikipedia.org/wiki/Logical_connective
+
 ## From boolean expression to logic tree
 
 Input boolean expression: `(true OR false) AND NOT(false) OR true OR false`
