@@ -3,6 +3,7 @@ class BinaryExpression {
   static type = 'BinaryExpression';
 
   constructor(token, params) {
+    this.token = token;
     this.type = BinaryExpression.type;
     this.operator = token.value;
     this.left = params.left;
