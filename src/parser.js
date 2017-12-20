@@ -7,6 +7,10 @@ const UnexpectedTokenException = require('./unexpected-token-exception');
 const UnexpectedEndOfLineException = require('./unexpected-end-of-line-exception');
 const {isTokenInRange, isNodeInRange} = require('./utils');
 
+const priorities = new Map();
+priorities.set(tokens.names.AND, 10);
+priorities.set(tokens.names.OR, 5);
+
 class Parser {
 
   constructor(tokens) {
@@ -60,9 +64,25 @@ class Parser {
 
     this.next();
 
+    let left = this.contextTree;
+    let right = this.parseByToken(nextToken);
+
+    if (left instanceof BinaryExpression) {
+      if (priorities.get(left.token.name) < priorities.get(token.name)) {
+
+        return new BinaryExpression(left.token, {
+          left: left.left,
+          right: new BinaryExpression(token, {
+            left: left.right,
+            right: right
+          })
+        });
+      }
+    }
+
     return new BinaryExpression(token, {
-      left: this.contextTree,
-      right: this.parseByToken(nextToken)
+      left,
+      right
     });
   }
 
