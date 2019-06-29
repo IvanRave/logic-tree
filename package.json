@@ -1,7 +1,8 @@
 {
   "name": "logic-tree",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Build a JSON object from a logic expression string",
+  "repository": "github:IvanRave/logic-tree",
   "keywords": [
     "logic",
     "expression",
@@ -10,23 +11,22 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require babel-register test",
+    "test": "mocha --require @babel/register test",
     "lint": "eslint src/**/*.js"
   },
   "author": "Ivan Reyvart",
   "license": "Apache-2.0",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-builtin-extend": "^1.1.2",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.6.1",
-    "chai": "^4.1.2",
-    "eslint": "^4.12.0",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0",
-    "mocha": "^4.0.1"
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
+    "babel-eslint": "^10.0.2",
+    "chai": "^4.2.0",
+    "eslint": "^6.0.1",
+    "mocha": "^6.1.4"
   },
   "dependencies": {
-    "ramda": "^0.25.0"
+    "ramda": "^0.26.1"
   }
 }

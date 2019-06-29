@@ -1,10 +1,15 @@
 {
-  "extends": "airbnb-base",
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
   "env": {
     "node": true,
-    "jest": true
+    "jest": true,
+    "es6": true
   },
   "rules": {
-    "comma-dangle": ["error", "never"]
+    "comma-dangle": ["error", "never"],
+    "implicit-arrow-linebreak": "off",
+    "arrow-parens": "off",
+    "padded-blocks": "off"
   }
 }
