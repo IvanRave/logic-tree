@@ -1,24 +1,25 @@
-#  Abstract syntax tree for logic expressions
+# Abstract syntax tree for logic expressions
 
 Build an AST (JSON object) from a logic expression string
 
 ## Input
 
-```
+```js
     const logicExpression = 'a AND b OR c';
 ```
 
 ## Processing
 
-```
-    const bracketTree = new BracketTree(logicExpression);
-    const logicTree = new LogicTree(bracketTree.nodes, bracketTree.text).getAst();
+```js
+    const bracketTree = new BracketTree();
+    bracketTree.applyExpression(expr) // handle errors
+    const logicTree = new LogicTree(bracketTree.root)
 ```
 
 ## Output
 
-```
-    console.log(logicTree);
+```js
+    console.log(logicTree.root);
     
     {
       name: 'node0',
@@ -32,7 +33,6 @@ Build an AST (JSON object) from a logic expression string
       }]
     }
 ```
-
 
 ## Logical operators
 
@@ -68,7 +68,7 @@ Build an AST (JSON object) from a logic expression string
 | English | not      | and         | or          | either |
 | Russian | не       |  и          | или         | либо|
 
-https://en.wikipedia.org/wiki/Logical_connective
+<https://en.wikipedia.org/wiki/Logical_connective>
 
 ## From boolean expression to logic tree
 
@@ -89,7 +89,6 @@ Input boolean expression: `(true OR false) AND NOT(false) OR true OR false`
 - a XOR b  == (a OR b) AND (a NAND b)
 - a XNOR b == NOT(a XOR b)
 
-
 ### 4. Order of precedence (priority) for basic syntax operators
 
 |   Syntax  | Precedence |
@@ -99,7 +98,6 @@ Input boolean expression: `(true OR false) AND NOT(false) OR true OR false`
 |     AND   |      3     |
 |     OR    |      4     |
 
-
 ### 5. Define own relations between basic logical binary operators
 
 - AND can contain only ORs (1 to many)
@@ -107,10 +105,9 @@ Input boolean expression: `(true OR false) AND NOT(false) OR true OR false`
 
 ![Logic tree relationship](./docs/and-or.png)
 
-
 ### 6. Build an abstract syntax tree, using rules above
 
-```
+```js
     // input
     (a OR b) AND NOT(c) OR d OR e
 

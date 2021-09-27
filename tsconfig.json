@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "allowJs": true,
+        "alwaysStrict": true,
+        "esModuleInterop": true,
+        "target": "ES5",
+        "lib": [
+            "ES2015"
+        ],
+        "module": "CommonJS"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

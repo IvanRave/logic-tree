@@ -17,7 +17,7 @@ class Tokenizer {
 
   shouldIgnoreWhiteSpace(token) {
     const isWhiteSpace = token.name === tokens.names.SPACE;
-    return this.config.ignoreWhiteSpaces && isWhiteSpace;
+    return this.config?.ignoreWhiteSpaces && isWhiteSpace;
   }
 
   /**

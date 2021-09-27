@@ -1,9 +1,6 @@
-const chai = require('chai');
-const Parser = require('../src/parser');
-const UnexpectedTokenException = require('../src/unexpected-token-exception');
-const UnexpectedEndOfLineException = require('../src/unexpected-end-of-line-exception');
-
-const expect = chai.expect;
+const Parser = require('./parser');
+const UnexpectedTokenException = require('./unexpected-token-exception');
+const UnexpectedEndOfLineException = require('./unexpected-end-of-line-exception');
 
 describe('Parser', () => {
 
@@ -26,12 +23,12 @@ describe('Parser', () => {
     openParen: () => ({
       name: 'T_OPEN_PAREN',
       value: '(',
-      position: 3,
+      position: 3
     }),
     closeParen: () => ({
       name: 'T_CLOSE_PAREN',
       value: ')',
-      position: 4,
+      position: 4
     }),
     not: () => ({
       name: 'T_NOT',
@@ -52,7 +49,7 @@ describe('Parser', () => {
 
     const ast = parser.parse();
 
-    expect(ast).deep.equals({
+    expect(ast).toEqual({
       type: 'Identifier',
       name: 'a'
     });
@@ -65,7 +62,7 @@ describe('Parser', () => {
 
     const willException = () => parser.parse();
 
-    expect(willException).throw(UnexpectedTokenException);
+    expect(willException).toThrow(UnexpectedTokenException);
   });
 
   describe('BinaryExpression', () => {
@@ -78,7 +75,7 @@ describe('Parser', () => {
 
       const ast = parser.parse();
 
-      expect(ast).deep.equals({
+      expect(ast).toEqual({
         type: 'BinaryExpression',
         operator: 'or',
         left: {
@@ -100,7 +97,7 @@ describe('Parser', () => {
 
       const willException = () => parser.parse();
 
-      expect(willException).throw(UnexpectedTokenException);
+      expect(willException).toThrow(UnexpectedTokenException);
     });
 
     it('should not parse binary expression when token is incorrect', () => {
@@ -112,7 +109,7 @@ describe('Parser', () => {
 
       const willException = () => parser.parse();
 
-      expect(willException).throw(UnexpectedTokenException);
+      expect(willException).toThrow(UnexpectedTokenException);
     });
 
     it('should correct parse chain of BinaryExpression', () => {
@@ -147,7 +144,7 @@ describe('Parser', () => {
         }
       };
 
-      expect(originalAst).deep.equals(expectedAst);
+      expect(originalAst).toEqual(expectedAst);
     });
   });
 
@@ -160,7 +157,7 @@ describe('Parser', () => {
 
       const willException = () => parser.parse();
 
-      expect(willException).throw(UnexpectedEndOfLineException);
+      expect(willException).toThrow(UnexpectedEndOfLineException);
     });
 
     it('should throw UnexpectedEndOfLineException when there are other tokens after an opening paren and closing one is absent', () => {
@@ -173,7 +170,7 @@ describe('Parser', () => {
 
       const willException = () => parser.parse();
 
-      expect(willException).throw(UnexpectedEndOfLineException);
+      expect(willException).toThrow(UnexpectedEndOfLineException);
     });
 
     it('should correct parse opening and closing parenthesis', () => {
@@ -187,7 +184,7 @@ describe('Parser', () => {
 
       const ast = parser.parse();
 
-      expect(ast).deep.equals({
+      expect(ast).toEqual({
         type: 'BinaryExpression',
         operator: 'or',
         left: {
@@ -235,7 +232,7 @@ describe('Parser', () => {
         }
       };
 
-      expect(originalAst).deep.equals(expectedAst);
+      expect(originalAst).toEqual(expectedAst);
     });
 
     describe('Binary Expression priorities', () => {
@@ -251,7 +248,7 @@ describe('Parser', () => {
 
         const ast = parser.parse();
 
-        expect(ast).deep.equals({
+        expect(ast).toEqual({
           type: 'BinaryExpression',
           operator: 'or',
           left: {
@@ -284,7 +281,7 @@ describe('Parser', () => {
 
         const ast = parser.parse();
 
-        expect(ast).deep.equals({
+        expect(ast).toEqual({
           type: 'BinaryExpression',
           operator: 'or',
           left: {
@@ -326,7 +323,7 @@ describe('Parser', () => {
         }
       };
 
-      expect(expectedAst).deep.equals(originalAst);
+      expect(expectedAst).toEqual(originalAst);
     });
 
     it('should parse UnaryExpression chain', () => {
@@ -356,7 +353,7 @@ describe('Parser', () => {
         }
       };
 
-      expect(expectedAst).deep.equals(originalAst);
+      expect(expectedAst).toEqual(originalAst);
     });
   });
 });

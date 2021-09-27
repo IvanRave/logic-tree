@@ -1,7 +1,4 @@
-const chai = require('chai');
-const Tokenizer = require('../src/tokenizer');
-
-const expect = chai.expect;
+const Tokenizer = require('./tokenizer');
 
 const tokenize = (sourceCode, params) =>
   new Tokenizer(sourceCode, params).run();
@@ -10,9 +7,9 @@ describe('Tokenizer', () => {
 
   it('Should tokenize only one identifier', () => {
     const sourceCode = 'a';
-    const tokens = tokenize(sourceCode);
+    const tokens = tokenize(sourceCode, null);
 
-    expect(tokens).deep.equals([{
+    expect(tokens).toEqual([{
       name: 'T_IDENTIFIER',
       value: 'a',
       position: 0
@@ -21,9 +18,9 @@ describe('Tokenizer', () => {
 
   it('Should tokenize or expression', () => {
     const sourceCode = 'a or b';
-    const tokens = tokenize(sourceCode);
+    const tokens = tokenize(sourceCode, null);
 
-    expect(tokens).deep.equals([
+    expect(tokens).toEqual([
       {
         name: 'T_IDENTIFIER',
         value: 'a',
@@ -58,7 +55,7 @@ describe('Tokenizer', () => {
       ignoreWhiteSpaces: true
     });
 
-    expect(tokens).deep.equals([
+    expect(tokens).toEqual([
       {
         name: 'T_IDENTIFIER',
         value: 'a',
@@ -83,7 +80,7 @@ describe('Tokenizer', () => {
       ignoreWhiteSpaces: true
     });
 
-    expect(tokens).deep.equals([
+    expect(tokens).toEqual([
       {
         name: 'T_OR',
         value: 'or',
@@ -108,7 +105,7 @@ describe('Tokenizer', () => {
       ignoreWhiteSpaces: true
     });
 
-    expect(tokens).deep.equals([
+    expect(tokens).toEqual([
       {
         name: 'T_OR',
         value: 'or',
@@ -128,7 +125,7 @@ describe('Tokenizer', () => {
       ignoreWhiteSpaces: true
     });
 
-    expect(tokens).deep.equals([
+    expect(tokens).toEqual([
       {
         name: 'T_CLOSE_PAREN',
         value: ')',

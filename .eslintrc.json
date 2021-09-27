@@ -1,15 +1,23 @@
 {
-  "extends": "eslint:recommended",
-  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
   "env": {
     "node": true,
     "jest": true,
     "es6": true
   },
   "rules": {
-    "comma-dangle": ["error", "never"],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
     "implicit-arrow-linebreak": "off",
     "arrow-parens": "off",
-    "padded-blocks": "off"
+    "padded-blocks": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   }
 }
