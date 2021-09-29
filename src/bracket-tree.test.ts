@@ -1,10 +1,10 @@
 import BracketTree from './bracket-tree';
-import { INode } from './types';
+import { IBracketNode } from './types';
 
 type IExample = {
   name: string,
   input: string,
-  want: INode,
+  want: IBracketNode,
 }
 
 const examples: Array<IExample> = [{

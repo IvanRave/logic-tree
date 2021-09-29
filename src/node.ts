@@ -1,29 +1,31 @@
-import { INode } from './types'
+import {
+    INegationParam, IBracketNode,
+    IParentable, IRelText
+} from './types'
 
 const NODE_ID_PREFIX = 'node'
 const NODE_ID_REGEX = /^node(\d+)$/;
 
-export class Node implements INode {
-    constructor(public relText: string = '', public nodes: Array<INode> = []) {
-        this.relText = relText
-        this.nodes = nodes
-    }
+const REGEX_NEGATION = /^!/;
 
-    appendInnerNode(nextNode: INode) {
-        this.nodes.push(nextNode);
-        this.relText += Node.encodeNodeID(this.nodes.length - 1)
+export class BracketNode implements IBracketNode {
+    constructor(public relText: IRelText = '', public nodes: Array<IBracketNode> = []) { }
+
+    appendInnerNode(innerNode: IBracketNode) {
+        this.nodes.push(innerNode);
+        this.relText += BracketNode.encodeNodeID(this.nodes.length - 1)
     }
 
     appendInnerChar(char: string) {
         this.relText += char
     }
 
+    // e.g. 'a AND b' or 'node1 OR node2'
     hasManyElements() {
-        // e.g. 'a AND b' or 'node1 OR node2'
         return this.relText.indexOf(' ') >= 0
     }
 
-    static encodeNodeID(index: number) {
+    private static encodeNodeID(index: number) {
         return `${NODE_ID_PREFIX}${index}`
     }
 
@@ -33,5 +35,32 @@ export class Node implements INode {
             return +matching[1]
         }
         return -1
+    }
+
+    // !a => { true,  a }
+    // !node0 => { true,  node0 }
+    // TODO: complex expressions if needed, e.g. !a AND !b
+    // TODO: multiple negation if needed, e.g. !!a
+    static paramFromRelText(relText: IRelText): INegationParam {
+        return {
+            isNegation: REGEX_NEGATION.test(relText) || undefined,
+            name: relText.replace(REGEX_NEGATION, '')
+        }
+    }
+}
+
+export class BracketNodeWithParent extends BracketNode implements IParentable {
+    // getParent returns a parent node
+    getParent: () => IBracketNode | IParentable
+
+    constructor(parentNode: IBracketNode) {
+        super()
+
+        // this.getParent = () => parentNode
+        Object.defineProperty(this, 'getParent', {
+            enumerable: false,
+            writable: false,
+            value: () => parentNode
+        });
     }
 }

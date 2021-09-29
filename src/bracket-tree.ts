@@ -1,41 +1,23 @@
-import { Node } from './node';
-import { INode, IParentable } from './types';
+import { BracketNode, BracketNodeWithParent } from './node';
+import { IBracketNode, IParentable } from './types';
 
 const BRACKET_OPENED = '(';
 const BRACKET_CLOSED = ')';
 
-class NodeWithParent extends Node implements IParentable {
-  // getParent returns a parent node
-  //
-  // it return null for the root node
-  getParent: () => INode | (INode & IParentable)
-
-  constructor(parentNode: INode) {
-    super()
-
-    // this.getParent = () => parentNode
-    Object.defineProperty(this, 'getParent', {
-      enumerable: false,
-      writable: false,
-      value: () => parentNode
-    });
-  }
-}
-
-const buildTree = (root: INode, expr: string): INode => {
-  let currentNode: INode | NodeWithParent = root
+const buildTree = (root: IBracketNode, expr: string): IBracketNode => {
+  let currentNode: IBracketNode | IParentable = root
   for (const char of expr) {
     switch (char) {
       // move to the next node
       case BRACKET_OPENED: {
-        const nextNode = new NodeWithParent(currentNode);
+        const nextNode = new BracketNodeWithParent(currentNode);
         currentNode.appendInnerNode(nextNode)
         currentNode = nextNode;
         break
       }
       // return to the parent node
       case BRACKET_CLOSED: {
-        const parentNode = (currentNode as NodeWithParent).getParent()
+        const parentNode = (currentNode as IParentable).getParent()
         if (!parentNode) {
           throw new Error(`no parent node for a closed bracket: ${expr}`)
         }
@@ -51,18 +33,17 @@ const buildTree = (root: INode, expr: string): INode => {
   // the root must contain 1 node only (by design)
   // so add a wrapper (aka brackets) if it has few elements.
   if (root.hasManyElements()) {
-    return new Node(Node.encodeNodeID(0), [root])
+    const wrapperNode = new BracketNode()
+    wrapperNode.appendInnerNode(root)
+    return wrapperNode
   }
 
   return root;
 };
 
 class BracketTree {
-  root: INode
-
-  constructor() {
-    this.root = new Node();
-  }
+  root: IBracketNode
+  constructor() { this.root = new BracketNode() }
 
   applyExpression(expr: string) {
     this.root = buildTree(this.root, expr);

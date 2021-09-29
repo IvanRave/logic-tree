@@ -5,16 +5,11 @@
         "allowJs": true,
         "alwaysStrict": true,
         "esModuleInterop": true,
-        "target": "ES5",
-        "lib": [
-            "ES2015"
-        ],
-        "module": "CommonJS"
+        "target": "ES2015",
+        "module": "CommonJS",
+        "declaration": true
     },
     "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules"
+        "src"
     ]
 }
