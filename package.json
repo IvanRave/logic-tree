@@ -1,21 +1,26 @@
 {
   "name": "logic-tree",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Build a JSON object from a logic expression string",
-  "repository": "github:IvanRave/logic-tree",
+  "repository": "github:ivanrave/logic-tree",
   "keywords": [
     "logic",
     "expression",
     "parser",
     "tree"
   ],
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
-    "test": "jest src/*.test.ts",
+    "build": "tsc",
+    "test": "jest",
     "lint": "eslint --ext .ts src"
   },
   "author": "Ivan Reyvart",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "@types/ramda": "^0.27.45",
@@ -24,9 +29,7 @@
     "eslint": "^7.32.0",
     "jest": "^27.2.2",
     "ts-jest": "^27.0.5",
-    "typescript": "^4.4.3"
-  },
-  "dependencies": {
+    "typescript": "^4.4.3",
     "ramda": "^0.27.1"
   }
 }

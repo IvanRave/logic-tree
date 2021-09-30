@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
+        "target": "es5",
         "outDir": "./lib",
         "rootDir": "./src",
         "allowJs": true,
         "alwaysStrict": true,
         "esModuleInterop": true,
-        "target": "ES2015",
         "module": "CommonJS",
         "declaration": true
     },
