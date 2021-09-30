@@ -1,6 +1,6 @@
 {
   "name": "logic-tree",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Build a JSON object from a logic expression string",
   "repository": "github:ivanrave/logic-tree",
   "keywords": [
@@ -14,9 +14,6 @@
   "files": [
     "lib/**/*"
   ],
-  "publishConfig": {
-    "IvanRave:registry": "https://npm.pkg.github.com"
-  },
   "scripts": {
     "build": "tsc",
     "test": "jest",
